@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Warm-up
 
-## Getting Started
+Väike Next.js (App Router) harjutus: kaks lehte, loendur ja API endpoint.
 
-First, run the development server:
+## Käivitamine
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ava http://localhost:3000
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- `/` avaleht koos loenduri (suurendamine ja nullimine) ja serveri sõnumi nupuga
+- `/about` lühike tutvustus
+- `/api/message` API endpoint, mis tagastab JSON-i
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Mida ma õppisin
 
-## Learn More
+1. **Mida Next.js annab lisaks Reactile?**
+   Next.js lisab failipõhise routingu (App Router), serveripoolse renderdamise ja Server Componendid ning API endpointid (Route Handlers), nii et frontend ja backend saavad olla ühes projektis.
 
-To learn more about Next.js, take a look at the following resources:
+2. **Miks loendur vajab `'use client'`?**
+   `useState` ja `onClick` töötavad ainult brauseris, aga App Routeris on komponendid vaikimisi Server Componendid. `'use client'` märgib, et see komponent saadetakse brauserisse ja muudetakse seal interaktiivseks.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Kus jookseb `app/api/message/route.js` kood?**
+   Serveris, Next.js-i Node.js protsessis, mitte kasutaja brauseris. Brauser saab ainult JSON-vastuse.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Mille poolest sarnaneb see endpoint Expressi route'iga?**
+   Mõlemad seovad URL-i ja HTTP-meetodi funktsiooniga, mis tagastab vastuse. Expressis on see `app.get("/api/message", ...)` ja `res.json()`, Next.js-is fail `app/api/message/route.js`, mis ekspordib `GET` funktsiooni ja tagastab `Response.json()`.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. **Miks peavad saladused jääma serverisse?**
+   Kõik, mis jõuab brauserisse, on kasutajale DevToolsis nähtav. API võtmed ja andmebaasi paroolid peavad olema ainult serveri koodis ja keskkonnamuutujates, muidu saab igaüks neid kasutada.
